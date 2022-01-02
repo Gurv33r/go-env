@@ -11,13 +11,17 @@ import (
 
 func TestGet(t *testing.T) {
 	// create env file
-	_, err := os.Create(".env")
+	file, err := os.Create(".env")
 	if err != nil {
 		panic(err)
 	}
 	// write some test data
 	const fuzz = "A=1\nB=4\nC=HELLOWORLD"
-	os.WriteFile(".env", []byte(fuzz), os.ModeAppend)
+	err = os.WriteFile(".env", []byte(fuzz), os.ModeAppend)
+	if err != nil {
+		panic(err)
+	}
+	file.Close()
 	// compare results
 	ENV, err := env.Read(".env")
 	if err != nil {
