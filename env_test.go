@@ -1,6 +1,7 @@
 package env_test
 
 import (
+	"log"
 	"os"
 	"strings"
 	"testing"
@@ -18,7 +19,10 @@ func TestGet(t *testing.T) {
 	const fuzz = "A=1\nB=4\nC=HELLOWORLD"
 	os.WriteFile(".env", []byte(fuzz), os.ModeAppend)
 	// compare results
-	ENV := env.Read(".env")
+	ENV, err := env.Read(".env")
+	if err != nil {
+		log.Fatal(err)
+	}
 	// check if fuzz env vars are even in the map
 	if len(ENV["A"]) == 0 || len(ENV["B"]) == 0 || len(ENV["C"]) == 0 {
 		t.Errorf("Incorrect keys!")

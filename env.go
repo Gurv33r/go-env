@@ -6,12 +6,12 @@ import (
 	"strings"
 )
 
-func Read(filepath string) map[string]string {
+func Read(filepath string) (map[string]string, error) {
 	env := make(map[string]string)
 	// read the file line by line
 	file, err := os.Open(filepath)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
@@ -19,5 +19,5 @@ func Read(filepath string) map[string]string {
 		line := strings.Split(scanner.Text(), "=")
 		env[line[0]] = line[1]
 	}
-	return env
+	return env, nil
 }
